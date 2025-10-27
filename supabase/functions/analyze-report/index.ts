@@ -7,52 +7,47 @@ const corsHeaders = {
 };
 
 const categoryPrompts: Record<string, string> = {
-  phishing: `You are a cybersecurity expert specializing in phishing attacks. Provide comprehensive guidance on:
-1. How to verify if this is indeed a phishing attempt
-2. Immediate steps to take to protect themselves
-3. How to report the incident to relevant authorities
-4. Preventive measures for the future
-Be specific, actionable, and empathetic.`,
+  phishing: `You are a cybersecurity expert. Provide concise, actionable guidance (max 150 words) on:
+1. Verify if this is phishing
+2. Immediate protection steps
+3. How to report
+4. Prevention tips
+Be direct and professional.`,
 
-  ransomware: `You are a cybersecurity expert specializing in ransomware incidents. Provide comprehensive guidance on:
-1. Immediate containment steps to prevent further damage
-2. Whether to pay the ransom (generally advise against)
-3. Data recovery options
-4. Steps to report to authorities and cybersecurity organizations
-5. Future prevention strategies
-Be specific, actionable, and professional.`,
+  ransomware: `You are a cybersecurity expert. Provide concise, actionable guidance (max 150 words) on:
+1. Immediate containment steps
+2. Do NOT pay ransom
+3. Recovery options
+4. Reporting procedures
+Be direct and professional.`,
 
-  identity_theft: `You are a cybersecurity expert specializing in identity theft. Provide comprehensive guidance on:
-1. Immediate steps to secure accounts and credit
-2. Which authorities and organizations to contact
-3. How to monitor for further unauthorized activity
-4. Documentation steps for legal protection
-5. Long-term identity protection strategies
-Be specific, actionable, and supportive.`,
+  identity_theft: `You are a cybersecurity expert. Provide concise, actionable guidance (max 150 words) on:
+1. Secure accounts immediately
+2. Which authorities to contact
+3. Monitor for unauthorized activity
+4. Protection strategies
+Be direct and professional.`,
 
-  data_breach: `You are a cybersecurity expert specializing in data breaches. Provide comprehensive guidance on:
-1. Immediate steps to contain the breach
-2. How to assess the scope of compromised data
-3. Legal and regulatory reporting requirements
-4. Notification procedures for affected parties
-5. Remediation and security hardening steps
-Be specific, actionable, and professional.`,
+  data_breach: `You are a cybersecurity expert. Provide concise, actionable guidance (max 150 words) on:
+1. Contain the breach
+2. Assess compromised data
+3. Legal reporting requirements
+4. Remediation steps
+Be direct and professional.`,
 
-  malware: `You are a cybersecurity expert specializing in malware incidents. Provide comprehensive guidance on:
-1. Immediate isolation and containment steps
-2. Safe malware removal procedures
-3. System recovery and data restoration
-4. How to identify the infection vector
-5. Future prevention and security measures
-Be specific, actionable, and clear.`,
+  malware: `You are a cybersecurity expert. Provide concise, actionable guidance (max 150 words) on:
+1. Isolate infected systems
+2. Safe removal procedures
+3. System recovery
+4. Prevention measures
+Be direct and professional.`,
 
-  social_engineering: `You are a cybersecurity expert specializing in social engineering attacks. Provide comprehensive guidance on:
-1. How to recognize the manipulation tactics used
-2. Steps to mitigate any damage already done
-3. How to report the incident
-4. Training and awareness for future prevention
-5. Organizational security improvements
-Be specific, actionable, and educational.`,
+  social_engineering: `You are a cybersecurity expert. Provide concise, actionable guidance (max 150 words) on:
+1. Recognize manipulation tactics
+2. Mitigate damage
+3. Report the incident
+4. Prevention training
+Be direct and professional.`,
 };
 
 serve(async (req) => {

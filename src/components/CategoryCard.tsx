@@ -23,14 +23,14 @@ export const CategoryCard = ({ category, icon, description, onClick }: CategoryC
   return (
     <Card
       onClick={onClick}
-      className="group relative overflow-hidden border-border bg-card p-6 cursor-pointer transition-all hover:border-primary hover:shadow-[0_0_20px_hsl(var(--cyber-glow)/0.3)]"
+      className="group relative overflow-hidden border-border bg-card/50 backdrop-blur-sm p-5 cursor-pointer transition-all hover:border-primary hover:shadow-[0_0_20px_hsl(var(--cyber-glow)/0.3)] hover:scale-[1.02]"
     >
       <div className="relative z-10">
-        <div className="mb-4 inline-flex rounded-lg bg-gradient-to-br from-primary to-accent p-3 text-primary-foreground shadow-glow">
-          <IconComponent className="h-6 w-6" />
+        <div className="mb-3 inline-flex rounded-lg bg-gradient-to-br from-primary to-accent p-2.5 text-primary-foreground shadow-glow">
+          <IconComponent className="h-5 w-5" />
         </div>
-        <h3 className="mb-2 text-xl font-semibold text-foreground">{category}</h3>
-        <p className="text-sm text-muted-foreground">{description}</p>
+        <h3 className="mb-1.5 text-lg font-semibold text-foreground">{category}</h3>
+        <p className="text-xs text-muted-foreground leading-relaxed">{description}</p>
       </div>
       <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-accent/5 opacity-0 transition-opacity group-hover:opacity-100" />
     </Card>

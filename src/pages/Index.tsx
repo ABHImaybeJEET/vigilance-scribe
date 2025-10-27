@@ -92,34 +92,34 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-background">
       {/* Hero Section */}
-      <div className="relative overflow-hidden border-b border-border">
+      <div className="relative overflow-hidden border-b border-border/50">
         <div 
-          className="absolute inset-0 bg-cover bg-center opacity-30"
+          className="absolute inset-0 bg-cover bg-center opacity-20"
           style={{ backgroundImage: `url(${heroImage})` }}
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-background/50 to-background" />
+        <div className="absolute inset-0 bg-gradient-to-b from-background/80 to-background" />
         
-        <div className="relative container mx-auto px-4 py-20">
-          <div className="max-w-3xl mx-auto text-center space-y-6">
-            <h1 className="text-5xl md:text-6xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+        <div className="relative container mx-auto px-4 py-16">
+          <div className="max-w-3xl mx-auto text-center space-y-4">
+            <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
               AI Cyber Crime Reporter
             </h1>
-            <p className="text-xl text-muted-foreground">
-              Report cybersecurity incidents and receive instant AI-powered guidance on how to protect yourself
+            <p className="text-base text-muted-foreground max-w-2xl mx-auto">
+              Report cybersecurity incidents and receive instant AI-powered guidance
             </p>
           </div>
         </div>
       </div>
 
       {/* Main Content */}
-      <div className="container mx-auto px-4 py-12">
+      <div className="container mx-auto px-4 py-10">
         <div className="max-w-5xl mx-auto">
           {!selectedCategory && !aiResponse && (
             <div>
-              <h2 className="text-3xl font-bold text-center mb-8 text-foreground">
+              <h2 className="text-2xl font-semibold text-center mb-6 text-foreground">
                 Select Incident Category
               </h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {categories.map((category) => (
                   <CategoryCard
                     key={category.id}

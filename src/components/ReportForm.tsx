@@ -23,43 +23,44 @@ export const ReportForm = ({ category, onBack, onSubmit, isLoading }: ReportForm
   };
 
   return (
-    <Card className="border-border bg-card p-8">
+    <Card className="border-border bg-card/50 backdrop-blur-sm p-6">
       <Button
         variant="ghost"
         onClick={onBack}
-        className="mb-6 text-muted-foreground hover:text-foreground"
+        size="sm"
+        className="mb-4 text-muted-foreground hover:text-foreground"
       >
         <ArrowLeft className="mr-2 h-4 w-4" />
-        Back to Categories
+        Back
       </Button>
 
-      <h2 className="mb-6 text-2xl font-bold text-foreground">
+      <h2 className="mb-4 text-xl font-semibold text-foreground">
         Report {category.replace(/_/g, " ")}
       </h2>
 
-      <form onSubmit={handleSubmit} className="space-y-6">
+      <form onSubmit={handleSubmit} className="space-y-4">
         <div className="space-y-2">
-          <Label htmlFor="email">Your Email (Optional)</Label>
+          <Label htmlFor="email" className="text-sm">Your Email (Optional)</Label>
           <Input
             id="email"
             type="email"
             placeholder="your.email@example.com"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="bg-secondary border-input"
+            className="bg-secondary border-input text-sm"
           />
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="details">Incident Details</Label>
+          <Label htmlFor="details" className="text-sm">Incident Details</Label>
           <Textarea
             id="details"
             placeholder="Please describe the incident in detail..."
             value={details}
             onChange={(e) => setDetails(e.target.value)}
             required
-            rows={8}
-            className="bg-secondary border-input resize-none"
+            rows={6}
+            className="bg-secondary border-input resize-none text-sm"
           />
         </div>
 
