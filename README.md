@@ -1,73 +1,33 @@
-# Welcome to your Lovable project
+# 🕵️‍♂️ Vigilance – Cyber Crime Reporter App
 
-## Project info
+> **Empowering citizens to report cybercrimes safely, securely, and efficiently.**
 
-**URL**: https://lovable.dev/projects/3dcaabfb-bf53-429c-9ad8-7b36b0466626
+---
 
-## How can I edit this code?
+## 📖 Overview
 
-There are several ways of editing your application.
+**Vigilance** is a mobile and web-based application designed to streamline the process of reporting cyber crimes.  
+It bridges the gap between victims, law enforcement agencies, and cyber security cells — making reporting faster, more transparent, and easier to track.
 
-**Use Lovable**
+The app provides users with a safe digital platform to **report incidents**, **attach evidence**, **track case progress**, and **access cyber safety resources**.
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/3dcaabfb-bf53-429c-9ad8-7b36b0466626) and start prompting.
+---
 
-Changes made via Lovable will be committed automatically to this repo.
+## 🚀 Features
 
-**Use your preferred IDE**
+- 📝 **Report Cybercrimes:** File detailed reports for phishing, online fraud, identity theft, harassment, hacking, and more.  
+- 🔒 **Secure Evidence Upload:** Attach screenshots, documents, and videos safely with end-to-end encryption.  
+- 🧭 **Anonymous Reporting:** Option to file a report anonymously for user protection.  
+- 🔔 **Real-Time Status Tracking:** Stay updated on case progress through push notifications.  
+- 📚 **Cyber Safety Hub:** Learn about safe online practices, recent cyber threats, and prevention tips.  
+- 🧑‍💼 **Admin Dashboard:** Law enforcement officers can verify, assign, and manage cases efficiently.  
+- 🌐 **Multi-Platform Support:** Available for Android, iOS, and web.
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+---
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+## 🧑‍💻 Installation & Setup
 
-Follow these steps:
-
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
-```
-
-**Edit a file directly in GitHub**
-
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
-
-**Use GitHub Codespaces**
-
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
-
-## What technologies are used for this project?
-
-This project is built with:
-
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/3dcaabfb-bf53-429c-9ad8-7b36b0466626) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+### 1️⃣ Clone the Repository
+```bash
+git clone https://github.com/<your-username>/vigilance-cybercrime-reporter.git
+cd vigilance-cybercrime-reporter
