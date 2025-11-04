@@ -58,22 +58,48 @@ serve(async (req) => {
   try {
     const { category, details, email } = await req.json();
     
-    // Validate input
+    // Comprehensive input validation
     if (!category || !details) {
+      console.error('Validation error: Missing required fields');
       return new Response(
         JSON.stringify({ error: 'Missing required fields: category and details' }),
         { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
     
-    if (details.length < 20) {
+    // Validate category
+    const validCategories = ['phishing', 'ransomware', 'identity_theft', 'data_breach', 'malware', 'social_engineering'];
+    if (!validCategories.includes(category)) {
+      console.error('Validation error: Invalid category', category);
       return new Response(
-        JSON.stringify({ error: 'Incident details must be at least 20 characters long' }),
+        JSON.stringify({ error: 'Invalid incident category' }),
         { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
     
-    console.log('Processing report for category:', category);
+    // Validate details length
+    const sanitizedDetails = details.trim();
+    if (sanitizedDetails.length < 20 || sanitizedDetails.length > 5000) {
+      console.error('Validation error: Invalid details length', sanitizedDetails.length);
+      return new Response(
+        JSON.stringify({ error: 'Incident details must be between 20 and 5000 characters' }),
+        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+    
+    // Validate email if provided
+    if (email && email.trim().length > 0) {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email) || email.length > 255) {
+        console.error('Validation error: Invalid email format');
+        return new Response(
+          JSON.stringify({ error: 'Invalid email address' }),
+          { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        );
+      }
+    }
+    
+    console.log('Processing report for category:', category, '| Details length:', sanitizedDetails.length);
 
     const LOVABLE_API_KEY = Deno.env.get('LOVABLE_API_KEY');
     if (!LOVABLE_API_KEY) {

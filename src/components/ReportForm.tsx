@@ -4,7 +4,10 @@ import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card } from "@/components/ui/card";
-import { ArrowLeft, Send, FileText } from "lucide-react";
+import { ArrowLeft, Send, FileText, AlertCircle } from "lucide-react";
+import { reportFormSchema, sanitizeInput } from "@/lib/validation";
+import { useToast } from "@/hooks/use-toast";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 
 // Predefined example problems for each category
 const exampleProblems: Record<string, string[]> = {
@@ -51,13 +54,32 @@ export const ReportForm = ({ category, onBack, onSubmit, isLoading }: ReportForm
   const [details, setDetails] = useState("");
   const [email, setEmail] = useState("");
   const [showExamples, setShowExamples] = useState(false);
+  const [validationError, setValidationError] = useState<string | null>(null);
+  const { toast } = useToast();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (details.trim().length < 20) {
-      return; // Prevent submission if too short
+    setValidationError(null);
+    
+    // Validate form data
+    const formData = {
+      details: sanitizeInput(details),
+      email: email.trim(),
+      category: category
+    };
+    
+    try {
+      reportFormSchema.parse(formData);
+      onSubmit(formData.details, formData.email);
+    } catch (error: any) {
+      const errorMessage = error.errors?.[0]?.message || "Please check your input and try again";
+      setValidationError(errorMessage);
+      toast({
+        title: "Validation Error",
+        description: errorMessage,
+        variant: "destructive",
+      });
     }
-    onSubmit(details, email);
   };
 
   const examples = exampleProblems[category] || [];
@@ -65,6 +87,12 @@ export const ReportForm = ({ category, onBack, onSubmit, isLoading }: ReportForm
   const handleExampleClick = (example: string) => {
     setDetails(example);
     setShowExamples(false);
+    setValidationError(null);
+  };
+  
+  const handleDetailsChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setDetails(e.target.value);
+    setValidationError(null);
   };
 
   return (
@@ -79,21 +107,36 @@ export const ReportForm = ({ category, onBack, onSubmit, isLoading }: ReportForm
         Back
       </Button>
 
-      <h2 className="mb-4 text-xl font-semibold text-foreground">
+      <h2 className="mb-4 text-xl font-bold text-foreground tracking-tight">
         Report {category.replace(/_/g, " ")}
       </h2>
+      
+      {validationError && (
+        <Alert variant="destructive" className="mb-4">
+          <AlertCircle className="h-4 w-4" />
+          <AlertDescription className="font-medium">
+            {validationError}
+          </AlertDescription>
+        </Alert>
+      )}
 
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="space-y-2">
-          <Label htmlFor="email" className="text-sm">Your Email (Optional)</Label>
+          <Label htmlFor="email" className="text-sm font-semibold text-foreground">
+            Your Email (Optional)
+          </Label>
           <Input
             id="email"
             type="email"
             placeholder="your.email@example.com"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="bg-secondary border-input text-sm"
+            maxLength={255}
+            className="bg-secondary border-input text-sm font-medium"
           />
+          <p className="text-xs text-muted-foreground font-medium">
+            We'll send you a copy of the guidance
+          </p>
         </div>
 
         <div className="space-y-2">
@@ -131,15 +174,21 @@ export const ReportForm = ({ category, onBack, onSubmit, isLoading }: ReportForm
             id="details"
             placeholder="Please describe the incident in detail (minimum 20 characters)..."
             value={details}
-            onChange={(e) => setDetails(e.target.value)}
+            onChange={handleDetailsChange}
             required
             minLength={20}
+            maxLength={5000}
             rows={6}
-            className="bg-secondary border-input resize-none text-sm"
+            className="bg-secondary border-input resize-none text-sm font-medium leading-relaxed"
           />
-          <p className="text-xs text-muted-foreground">
-            {details.length}/20 characters minimum
-          </p>
+          <div className="flex justify-between items-center">
+            <p className={`text-xs font-semibold ${details.length < 20 ? 'text-destructive' : 'text-muted-foreground'}`}>
+              {details.length}/20 characters minimum
+            </p>
+            <p className="text-xs text-muted-foreground font-medium">
+              Max: 5000 characters
+            </p>
+          </div>
         </div>
 
         <Button

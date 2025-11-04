@@ -1,10 +1,13 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { CategoryCard } from "@/components/CategoryCard";
 import { ReportForm } from "@/components/ReportForm";
 import { AIResponse } from "@/components/AIResponse";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import { validateEnv } from "@/lib/env";
 import heroImage from "@/assets/cyber-hero.jpg";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { AlertCircle } from "lucide-react";
 
 const categories = [
   {
@@ -49,7 +52,16 @@ const Index = () => {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [aiResponse, setAiResponse] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [envError, setEnvError] = useState<string | null>(null);
   const { toast } = useToast();
+  
+  useEffect(() => {
+    const { isValid, errors } = validateEnv();
+    if (!isValid) {
+      console.error("Environment validation failed:", errors);
+      setEnvError("Application configuration error. Please check environment variables.");
+    }
+  }, []);
 
   const handleCategorySelect = (categoryId: string) => {
     setSelectedCategory(categoryId);
@@ -134,22 +146,32 @@ const Index = () => {
         
         <div className="relative container mx-auto px-4 py-16">
           <div className="max-w-3xl mx-auto text-center space-y-4">
-            <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+            <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent leading-tight tracking-tight">
               AI Cyber Crime Reporter
             </h1>
-            <p className="text-base text-muted-foreground max-w-2xl mx-auto">
+            <p className="text-base md:text-lg text-foreground/90 max-w-2xl mx-auto font-medium leading-relaxed">
               Report cybersecurity incidents and receive instant AI-powered guidance
             </p>
           </div>
         </div>
       </div>
 
+      {/* Environment Error Alert */}
+      {envError && (
+        <div className="container mx-auto px-4 py-4">
+          <Alert variant="destructive">
+            <AlertCircle className="h-4 w-4" />
+            <AlertDescription className="font-medium">{envError}</AlertDescription>
+          </Alert>
+        </div>
+      )}
+
       {/* Main Content */}
       <div className="container mx-auto px-4 py-10">
         <div className="max-w-5xl mx-auto">
           {!selectedCategory && !aiResponse && (
             <div>
-              <h2 className="text-2xl font-semibold text-center mb-6 text-foreground">
+              <h2 className="text-2xl md:text-3xl font-bold text-center mb-6 text-foreground tracking-tight">
                 Select Incident Category
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">

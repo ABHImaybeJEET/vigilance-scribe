@@ -41,7 +41,7 @@ export const AIResponse = ({ response, onNewReport }: AIResponseProps) => {
             <div className="rounded-full bg-gradient-to-br from-primary to-accent p-2">
               <CheckCircle2 className="h-5 w-5 text-primary-foreground" />
             </div>
-            <h2 className="text-xl font-semibold text-foreground">Security Guidance</h2>
+            <h2 className="text-xl font-bold text-foreground tracking-tight">Security Guidance</h2>
           </div>
           <div className="flex gap-2">
             <Button
@@ -63,8 +63,8 @@ export const AIResponse = ({ response, onNewReport }: AIResponseProps) => {
           </div>
         </div>
 
-        <div className="prose prose-invert max-w-none prose-headings:text-foreground prose-p:text-muted-foreground prose-strong:text-foreground prose-li:text-muted-foreground">
-          <div className="text-sm leading-relaxed whitespace-pre-wrap">
+        <div className="prose prose-invert max-w-none prose-headings:text-foreground prose-p:text-foreground/95 prose-strong:text-foreground prose-li:text-foreground/95">
+          <div className="text-sm md:text-base leading-relaxed whitespace-pre-wrap font-medium">
             {response}
           </div>
         </div>
@@ -75,8 +75,8 @@ export const AIResponse = ({ response, onNewReport }: AIResponseProps) => {
           <div className="flex items-start gap-3">
             <AlertCircle className="h-5 w-5 text-accent flex-shrink-0 mt-0.5" />
             <div>
-              <p className="text-sm font-medium text-foreground mb-1">Disclaimer</p>
-              <p className="text-xs text-muted-foreground">
+              <p className="text-sm font-bold text-foreground mb-1">Disclaimer</p>
+              <p className="text-xs text-foreground/80 font-medium leading-relaxed">
                 AI-generated guidance. For serious incidents, contact professionals.
               </p>
             </div>
@@ -87,8 +87,8 @@ export const AIResponse = ({ response, onNewReport }: AIResponseProps) => {
           <div className="flex items-start gap-3">
             <Phone className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
             <div>
-              <p className="text-sm font-medium text-foreground mb-1">Emergency Contact</p>
-              <p className="text-xs text-muted-foreground">
+              <p className="text-sm font-bold text-foreground mb-1">Emergency Contact</p>
+              <p className="text-xs text-foreground/80 font-medium leading-relaxed">
                 Report to local cyber crime authorities if needed
               </p>
             </div>
