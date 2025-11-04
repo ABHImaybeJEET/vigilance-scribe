@@ -57,17 +57,38 @@ serve(async (req) => {
 
   try {
     const { category, details, email } = await req.json();
+    
+    // Validate input
+    if (!category || !details) {
+      return new Response(
+        JSON.stringify({ error: 'Missing required fields: category and details' }),
+        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+    
+    if (details.length < 20) {
+      return new Response(
+        JSON.stringify({ error: 'Incident details must be at least 20 characters long' }),
+        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+    
     console.log('Processing report for category:', category);
 
     const LOVABLE_API_KEY = Deno.env.get('LOVABLE_API_KEY');
     if (!LOVABLE_API_KEY) {
-      throw new Error('LOVABLE_API_KEY is not configured');
+      console.error('LOVABLE_API_KEY not configured');
+      throw new Error('AI service configuration error');
     }
 
     const systemPrompt = categoryPrompts[category] || categoryPrompts.phishing;
     const userMessage = `Incident details: ${details}${email ? `\nContact email: ${email}` : ''}`;
 
-    console.log('Calling AI gateway...');
+    console.log('Calling AI gateway with model: google/gemini-2.5-flash');
+    
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 30000); // 30 second timeout
+    
     const response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
       method: 'POST',
       headers: {
@@ -81,7 +102,10 @@ serve(async (req) => {
           { role: 'user', content: userMessage }
         ],
       }),
+      signal: controller.signal,
     });
+    
+    clearTimeout(timeoutId);
 
     if (!response.ok) {
       const errorText = await response.text();
@@ -101,12 +125,25 @@ serve(async (req) => {
         );
       }
       
+      if (response.status === 503) {
+        return new Response(
+          JSON.stringify({ error: 'AI service temporarily unavailable. Please try again.' }),
+          { status: 503, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        );
+      }
+      
       throw new Error(`AI gateway error: ${response.status}`);
     }
 
     const data = await response.json();
+    
+    if (!data.choices || !data.choices[0] || !data.choices[0].message || !data.choices[0].message.content) {
+      console.error('Invalid AI response structure:', data);
+      throw new Error('Invalid response from AI service');
+    }
+    
     const aiResponse = data.choices[0].message.content;
-    console.log('AI response generated successfully');
+    console.log('AI response generated successfully, length:', aiResponse.length);
 
     return new Response(
       JSON.stringify({ response: aiResponse }),
@@ -114,8 +151,27 @@ serve(async (req) => {
     );
   } catch (error) {
     console.error('Error in analyze-report function:', error);
+    
+    // Handle timeout errors
+    if (error instanceof Error && error.name === 'AbortError') {
+      return new Response(
+        JSON.stringify({ error: 'Request timeout. Please try again.' }),
+        { status: 504, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+    
+    // Handle network errors
+    if (error instanceof TypeError && error.message.includes('fetch')) {
+      return new Response(
+        JSON.stringify({ error: 'Network error. Please check your connection.' }),
+        { status: 503, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+    
     return new Response(
-      JSON.stringify({ error: error instanceof Error ? error.message : 'Unknown error occurred' }),
+      JSON.stringify({ 
+        error: error instanceof Error ? error.message : 'An unexpected error occurred. Please try again.' 
+      }),
       { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     );
   }

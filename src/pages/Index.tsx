@@ -58,30 +58,63 @@ const Index = () => {
 
   const handleSubmitReport = async (details: string, email: string) => {
     setIsLoading(true);
-    try {
-      const { data, error } = await supabase.functions.invoke('analyze-report', {
-        body: { category: selectedCategory, details, email }
-      });
+    
+    // Retry logic for better reliability
+    const maxRetries = 2;
+    let lastError: Error | null = null;
+    
+    for (let attempt = 0; attempt <= maxRetries; attempt++) {
+      try {
+        const { data, error } = await supabase.functions.invoke('analyze-report', {
+          body: { category: selectedCategory, details, email }
+        });
 
-      if (error) {
-        throw error;
+        if (error) {
+          throw error;
+        }
+
+        if (!data || !data.response) {
+          throw new Error('No response received from AI service');
+        }
+
+        setAiResponse(data.response);
+        toast({
+          title: "Analysis Complete",
+          description: "AI-powered security guidance has been generated.",
+        });
+        setIsLoading(false);
+        return; // Success, exit the function
+      } catch (error) {
+        console.error(`Attempt ${attempt + 1} failed:`, error);
+        lastError = error instanceof Error ? error : new Error('Unknown error');
+        
+        // If this is the last attempt, show error
+        if (attempt === maxRetries) {
+          break;
+        }
+        
+        // Wait before retrying (exponential backoff)
+        await new Promise(resolve => setTimeout(resolve, 1000 * (attempt + 1)));
       }
-
-      setAiResponse(data.response);
-      toast({
-        title: "Analysis Complete",
-        description: "AI-powered security guidance has been generated.",
-      });
-    } catch (error) {
-      console.error('Error:', error);
-      toast({
-        title: "Error",
-        description: error instanceof Error ? error.message : "Failed to analyze report. Please try again.",
-        variant: "destructive",
-      });
-    } finally {
-      setIsLoading(false);
     }
+    
+    // All retries failed
+    setIsLoading(false);
+    
+    let errorMessage = "Failed to analyze report. Please try again.";
+    if (lastError?.message.includes('rate limit')) {
+      errorMessage = "Service is currently busy. Please try again in a moment.";
+    } else if (lastError?.message.includes('network') || lastError?.message.includes('fetch')) {
+      errorMessage = "Network error. Please check your connection and try again.";
+    } else if (lastError?.message.includes('402') || lastError?.message.includes('payment')) {
+      errorMessage = "AI service is temporarily unavailable. Please try again later.";
+    }
+    
+    toast({
+      title: "Unable to Complete Analysis",
+      description: errorMessage,
+      variant: "destructive",
+    });
   };
 
   const handleNewReport = () => {

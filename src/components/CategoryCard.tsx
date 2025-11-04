@@ -17,8 +17,19 @@ const iconMap = {
   social_engineering: Users,
 };
 
+// Common examples for quick reference
+const categoryExamples: Record<string, string> = {
+  phishing: "e.g., Suspicious emails, fake login pages",
+  ransomware: "e.g., Encrypted files, ransom demands",
+  identity_theft: "e.g., Unauthorized accounts, stolen identity",
+  data_breach: "e.g., Exposed data, leaked information",
+  malware: "e.g., Infected devices, suspicious software",
+  social_engineering: "e.g., Impersonation, manipulation tactics",
+};
+
 export const CategoryCard = ({ category, icon, description, onClick }: CategoryCardProps) => {
   const IconComponent = iconMap[icon as keyof typeof iconMap] || Shield;
+  const example = categoryExamples[icon] || "";
 
   return (
     <Card
@@ -31,6 +42,9 @@ export const CategoryCard = ({ category, icon, description, onClick }: CategoryC
         </div>
         <h3 className="mb-1.5 text-lg font-semibold text-foreground">{category}</h3>
         <p className="text-xs text-muted-foreground leading-relaxed">{description}</p>
+        {example && (
+          <p className="text-xs text-primary/70 italic mt-2">{example}</p>
+        )}
       </div>
       <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-accent/5 opacity-0 transition-opacity group-hover:opacity-100" />
     </Card>
